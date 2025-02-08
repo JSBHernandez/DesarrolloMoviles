@@ -44,6 +44,12 @@ class _MyHomePageState extends State<MyHomePage> {
       "carrera": "Psicologia",
       "promedio": 4.1
     },
+    {
+      "imagen": "assets/9.jpg",
+      "nombres": "Jeong Jaehyun",
+      "carrera": "Ing Industrial",
+      "promedio": 3.9
+    }
   ];
 
   @override
