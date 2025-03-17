@@ -1,11 +1,13 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors'); 
 const authRoutes = require('./routes/auth');
 const articleRoutes = require('./routes/articles');
 const favoriteRoutes = require('./routes/favorites');
 
 const app = express();
 app.use(bodyParser.json());
+app.use(cors()); 
 
 app.use('/auth', authRoutes);
 app.use('/articles', articleRoutes);

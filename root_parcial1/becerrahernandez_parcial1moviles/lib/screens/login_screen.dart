@@ -20,6 +20,7 @@ class _LoginScreenState extends State<LoginScreen> {
       Navigator.pushReplacementNamed(context, '/articles');
     } else {
       // Handle login error
+      print('Login failed');
     }
   }
 

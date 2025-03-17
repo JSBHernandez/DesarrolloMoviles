@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import '../models/article.dart';
 
 class ApiService {
-  static const String baseUrl = 'http://localhost:3000';
+  static const String baseUrl = 'http://localhost:3000'; // Cambia localhost a la IP correcta si es necesario
 
   static Future<String?> login(String username, String password) async {
     final response = await http.post(
@@ -28,7 +28,7 @@ class ApiService {
   }
 
   static Future<List<Article>> getFavorites() async {
-    final response = await http.get(Uri.parse('$baseUrl/favorites'));
+    final response = await http.get(Uri.parse('$baseUrl/articles')); // Asegúrate de que la URL sea correcta
     if (response.statusCode == 200) {
       final List<dynamic> data = jsonDecode(response.body);
       return data.map((json) => Article.fromJson(json)).toList();

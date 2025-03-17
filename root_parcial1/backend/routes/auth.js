@@ -17,9 +17,16 @@ router.post('/login', async (req, res) => {
 
 router.post('/register', async (req, res) => {
   const { username, password } = req.body;
-  const hashedPassword = bcrypt.hashSync(password, 10);
-  const user = await User.create({ username, password: hashedPassword });
-  res.json(user);
+  if (!username || !password) {
+    return res.status(400).send('Username and password are required');
+  }
+  try {
+    const hashedPassword = bcrypt.hashSync(password, 10);
+    const user = await User.create({ username, password: hashedPassword });
+    res.json(user);
+  } catch (error) {
+    res.status(500).send('Error creating user');
+  }
 });
 
 module.exports = router;

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'screens/login_screen.dart';
 import 'screens/articles_screen.dart';
+import 'screens/favorites_screen.dart'; // Importa la pantalla de favoritos
 
 void main() {
   runApp(const MyApp());
@@ -17,16 +18,22 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: FutureBuilder(
-        future: _checkLoginStatus(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
-          } else {
-            return snapshot.data == true ? ArticlesScreen() : LoginScreen();
-          }
-        },
-      ),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => FutureBuilder(
+          future: _checkLoginStatus(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            } else {
+              return snapshot.data == true ? ArticlesScreen() : LoginScreen();
+            }
+          },
+        ),
+        '/login': (context) => LoginScreen(),
+        '/articles': (context) => ArticlesScreen(),
+        '/favorites': (context) => FavoritesScreen(), // Añade la ruta para favoritos
+      },
     );
   }
 

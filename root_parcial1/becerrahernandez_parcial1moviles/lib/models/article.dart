@@ -4,6 +4,7 @@ class Article {
   final String seller;
   final double rating;
   final String imageUrl;
+  bool isFavorite;
 
   Article({
     required this.id,
@@ -11,6 +12,7 @@ class Article {
     required this.seller,
     required this.rating,
     required this.imageUrl,
+    this.isFavorite = false,
   });
 
   factory Article.fromJson(Map<String, dynamic> json) {
@@ -20,6 +22,7 @@ class Article {
       seller: json['seller'],
       rating: json['rating'],
       imageUrl: json['imageUrl'],
+      isFavorite: json['isFavorite'] ?? false,
     );
   }
 
@@ -30,6 +33,7 @@ class Article {
       'seller': seller,
       'rating': rating,
       'imageUrl': imageUrl,
+      'isFavorite': isFavorite,
     };
   }
 }
