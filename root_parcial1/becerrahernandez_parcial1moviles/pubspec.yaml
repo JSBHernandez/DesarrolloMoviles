@@ -36,6 +36,7 @@ dependencies:
   sqflite: ^2.0.0+3
   path_provider: ^2.0.2
   path: ^1.8.0
+  dart_jsonwebtoken: ^2.0.0
 
 dev_dependencies:
   flutter_test:
