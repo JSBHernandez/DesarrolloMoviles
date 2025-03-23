@@ -40,7 +40,7 @@ class HomePage extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => const FirstView()),
                 );
               },
-              child: const Text('Go to First View'),
+              child: const Text('Vista 1'),
             ),
             ElevatedButton(
               onPressed: () {
@@ -49,7 +49,7 @@ class HomePage extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => const SecondView()),
                 );
               },
-              child: const Text('Go to Second View'),
+              child: const Text('Vista 2'),
             ),
           ],
         ),
@@ -69,70 +69,74 @@ class _FirstViewState extends State<FirstView> {
   String _selectedOption = 'None';
 
   void _showOptions() {
+    String? selectedOption = _selectedOption;
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
-        String? selectedOption;
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            RadioListTile<String>(
-              title: const Text('Amarillo'),
-              value: 'Amarillo',
-              groupValue: selectedOption,
-              onChanged: (String? value) {
-                setState(() {
-                  selectedOption = value;
-                });
-              },
-            ),
-            RadioListTile<String>(
-              title: const Text('Naranja'),
-              value: 'Naranja',
-              groupValue: selectedOption,
-              onChanged: (String? value) {
-                setState(() {
-                  selectedOption = value;
-                });
-              },
-            ),
-            RadioListTile<String>(
-              title: const Text('Rojo'),
-              value: 'Rojo',
-              groupValue: selectedOption,
-              onChanged: (String? value) {
-                setState(() {
-                  selectedOption = value;
-                });
-              },
-            ),
-            RadioListTile<String>(
-              title: const Text('Verde'),
-              value: 'Verde',
-              groupValue: selectedOption,
-              onChanged: (String? value) {
-                setState(() {
-                  selectedOption = value;
-                });
-              },
-            ),
-            RadioListTile<String>(
-              title: const Text('Azul'),
-              value: 'Azul',
-              groupValue: selectedOption,
-              onChanged: (String? value) {
-                setState(() {
-                  selectedOption = value;
-                });
-              },
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context, selectedOption);
-              },
-              child: const Text('Aceptar'),
-            ),
-          ],
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                RadioListTile<String>(
+                  title: const Text('Amarillo'),
+                  value: 'Amarillo',
+                  groupValue: selectedOption,
+                  onChanged: (String? value) {
+                    setState(() {
+                      selectedOption = value;
+                    });
+                  },
+                ),
+                RadioListTile<String>(
+                  title: const Text('Naranja'),
+                  value: 'Naranja',
+                  groupValue: selectedOption,
+                  onChanged: (String? value) {
+                    setState(() {
+                      selectedOption = value;
+                    });
+                  },
+                ),
+                RadioListTile<String>(
+                  title: const Text('Rojo'),
+                  value: 'Rojo',
+                  groupValue: selectedOption,
+                  onChanged: (String? value) {
+                    setState(() {
+                      selectedOption = value;
+                    });
+                  },
+                ),
+                RadioListTile<String>(
+                  title: const Text('Verde'),
+                  value: 'Verde',
+                  groupValue: selectedOption,
+                  onChanged: (String? value) {
+                    setState(() {
+                      selectedOption = value;
+                    });
+                  },
+                ),
+                RadioListTile<String>(
+                  title: const Text('Azul'),
+                  value: 'Azul',
+                  groupValue: selectedOption,
+                  onChanged: (String? value) {
+                    setState(() {
+                      selectedOption = value;
+                    });
+                  },
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context, selectedOption);
+                  },
+                  child: const Text('Aceptar'),
+                ),
+              ],
+            );
+          },
         );
       },
     ).then((value) {
@@ -148,7 +152,7 @@ class _FirstViewState extends State<FirstView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('First View'),
+        title: const Text('Vista 1'),
       ),
       body: Center(
         child: Column(
@@ -156,7 +160,7 @@ class _FirstViewState extends State<FirstView> {
           children: <Widget>[
             ElevatedButton(
               onPressed: _showOptions,
-              child: const Text('Show Options'),
+              child: const Text('Mostrar Opciones'),
             ),
             const SizedBox(height: 16.0),
             Text('Opción seleccionada: $_selectedOption'),
@@ -183,7 +187,7 @@ class SecondView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Second View'),
+        title: const Text('Vista 2'),
       ),
       body: Center(
         child: Column(
@@ -222,7 +226,7 @@ class ThirdView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Third View'),
+        title: const Text('Vista 3'),
       ),
       body: Center(
         child: Text('Botón presionado: $buttonLabel'),
