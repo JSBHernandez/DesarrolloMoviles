@@ -14,6 +14,10 @@ app.use(express.json());
 app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use('/', router);
 
+app.get('/', (req, res) => {
+    res.send('Bienvenido a la API');
+});
+
 app.listen(3000, () => {
     console.log('Bienvenido al servidor, puerto 3000');
 });
