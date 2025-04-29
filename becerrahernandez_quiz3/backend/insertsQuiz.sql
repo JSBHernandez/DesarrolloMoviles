@@ -20,5 +20,5 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 LOCK TABLES `users` WRITE;
-INSERT INTO `users` VALUES ('jose','123');
+INSERT INTO `users` VALUES ('juanse','123');
 UNLOCK TABLES;
