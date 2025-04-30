@@ -18,16 +18,33 @@ class _SettingsPageState extends State<SettingsPage> {
     bool isAuthenticated = false;
 
     try {
+      // Verifica si el dispositivo soporta autenticación biométrica
+      bool canCheckBiometrics = await auth.canCheckBiometrics;
+      bool isDeviceSupported = await auth.isDeviceSupported();
+
+      if (!canCheckBiometrics || !isDeviceSupported) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Autenticación biométrica no disponible'),
+          ),
+        );
+        return;
+      }
+
+      // Realiza la autenticación biométrica
       isAuthenticated = await auth.authenticate(
         localizedReason: 'Por favor autentícate para continuar',
         options: const AuthenticationOptions(biometricOnly: true),
       );
     } catch (e) {
       print("Error en autenticación biométrica: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Error en autenticación biométrica')),
+      );
+      return;
     }
 
     if (isAuthenticated) {
-      // Muestra un mensaje de autenticación exitosa.
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(const SnackBar(content: Text('Autenticación Exitosa')));
@@ -65,59 +82,27 @@ class _SettingsPageState extends State<SettingsPage> {
                     password: password,
                   );
 
-                  APIService.saveLogin(model, token!)
-                      .then((response) async {
-                        if (response) {
-                          String? token = await APIService.getToken();
-                          print('Token guardado: $token');
-                          Navigator.pushNamedAndRemoveUntil(
-                            // ignore: use_build_context_synchronously
-                            context,
-                            '/',
-                            (route) => false,
-                            arguments: true,
-                          );
-                        } else {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                title: const Text('Login'),
-                                content: const Text(
-                                  'Usuario o Contraseña invalidos',
-                                ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: const Text('OK'),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        }
-                      })
-                      .catchError((error) {
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: const Text('ERROR'),
-                              content: const Text('ERROR'),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: const Text('OK'),
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      });
+                  try {
+                    final response = await APIService.saveLogin(model, token!);
+                    if (response) {
+                      String? newToken = await APIService.getToken();
+                      print('Token guardado: $newToken');
+                      if (!mounted) return;
+                      Navigator.pushNamedAndRemoveUntil(
+                        context,
+                        '/',
+                        (route) => false,
+                        arguments: true,
+                      );
+                    } else {
+                      _showErrorDialog(
+                        context,
+                        'Usuario o Contraseña inválidos',
+                      );
+                    }
+                  } catch (error) {
+                    _showErrorDialog(context, 'Error al guardar el login');
+                  }
                 },
                 child: const Text('Aceptar'),
               ),
@@ -126,7 +111,6 @@ class _SettingsPageState extends State<SettingsPage> {
         },
       );
     } else {
-      // Si la autenticación falla.
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(const SnackBar(content: Text('Autenticación Fallida')));
@@ -144,6 +128,10 @@ class _SettingsPageState extends State<SettingsPage> {
       );
     } catch (e) {
       print("Error en autenticación biométrica: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Error en autenticación biométrica')),
+      );
+      return;
     }
 
     if (isAuthenticated) {
@@ -151,8 +139,8 @@ class _SettingsPageState extends State<SettingsPage> {
         context,
       ).showSnackBar(const SnackBar(content: Text('Desautenticación Exitosa')));
       await APIService.deleteToken();
+      if (!mounted) return;
       Navigator.pushNamedAndRemoveUntil(
-        // ignore: use_build_context_synchronously
         context,
         '/',
         (route) => false,
@@ -163,6 +151,26 @@ class _SettingsPageState extends State<SettingsPage> {
         context,
       ).showSnackBar(const SnackBar(content: Text('Autenticación Fallida')));
     }
+  }
+
+  void _showErrorDialog(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Error'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
